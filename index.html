@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist - Modo Caverna</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a1a;
+            padding: 15px;
+            min-height: 100vh;
+            transition: background 0.3s;
+        }
+
+        body.light-mode {
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.light-mode .container {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        body:not(.light-mode) .container {
+            background: #2a2a2a;
+            color: #ffffff;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 20px;
+            }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .title-section {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        body:not(.light-mode) h1 {
+            color: #ffffff;
+        }
+
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 24px;
+            }
+        }
+
+        .current-date {
+            font-size: 14px;
+            color: #757575;
+            font-weight: 400;
+        }
+
+        body:not(.light-mode) .current-date {
+            color: #9e9e9e;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .mode-toggle {
+            padding: 8px 16px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .mode-toggle:hover {
+            background: #1976D2;
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        body:not(.light-mode) .stat-box {
+            background: #1a1a1a;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2196F3;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #757575;
+            margin-top: 4px;
+        }
+
+        body:not(.light-mode) .stat-label {
+            color: #9e9e9e;
+        }
+
+        .pomodoro-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        body:not(.light-mode) .pomodoro-section {
+            background: #1a1a1a;
+        }
+
+        .pomodoro-timer {
+            font-size: 48px;
+            font-weight: 600;
+            color: #2196F3;
+            margin: 15px 0;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .pomodoro-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .pomodoro-btn {
+            padding: 10px 20px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .pomodoro-btn:hover {
+            background: #1976D2;
+        }
+
+        .pomodoro-btn.secondary {
+            background: #757575;
+        }
+
+        .pomodoro-btn.secondary:hover {
+            background: #616161;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .input-container {
+                flex-direction: column;
+            }
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+            background: white;
+            color: #1a1a1a;
+        }
+
+        body:not(.light-mode) input[type="text"] {
+            background: #1a1a1a;
+            color: #ffffff;
+            border-color: #404040;
+        }
+
+        input[type="text"]:focus {
+            border-color: #2196F3;
+        }
+
+        select {
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            background: white;
+            color: #1a1a1a;
+            cursor: pointer;
+        }
+
+        body:not(.light-mode) select {
+            background: #1a1a1a;
+            color: #ffffff;
+            border-color: #404040;
+        }
+
+        @media (max-width: 480px) {
+            input[type="text"], select {
+                width: 100%;
+            }
+        }
+
+        button.add-btn {
+            padding: 14px 28px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        button.add-btn:hover {
+            background: #1976D2;
+        }
+
+        @media (max-width: 480px) {
+            button.add-btn {
+                width: 100%;
+                padding: 14px;
+            }
+        }
+
+        .clear-completed {
+            padding: 10px 20px;
+            background: transparent;
+            color: #757575;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 15px;
+            transition: all 0.2s;
+        }
+
+        body:not(.light-mode) .clear-completed {
+            color: #9e9e9e;
+            border-color: #404040;
+        }
+
+        .clear-completed:hover {
+            background: #1a1a1a;
+            color: white;
+            border-color: #1a1a1a;
+        }
+
+        body:not(.light-mode) .clear-completed:hover {
+            background: #404040;
+            border-color: #404040;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 20px 0 10px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #2196F3;
+        }
+
+        body:not(.light-mode) .section-title {
+            color: #ffffff;
+        }
+
+        .task-list {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 12px;
+            border-bottom: 1px solid #f0f0f0;
+            gap: 12px;
+        }
+
+        body:not(.light-mode) .task-item {
+            border-bottom-color: #404040;
+        }
+
+        @media (max-width: 480px) {
+            .task-item {
+                padding: 12px 8px;
+                flex-wrap: wrap;
+            }
+        }
+
+        .task-item:hover {
+            background: #f8f9fa;
+        }
+
+        body:not(.light-mode) .task-item:hover {
+            background: #1a1a1a;
+        }
+
+        .task-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #2196F3;
+            flex-shrink: 0;
+        }
+
+        .task-text {
+            flex: 1;
+            font-size: 15px;
+            color: #1a1a1a;
+            word-break: break-word;
+        }
+
+        body:not(.light-mode) .task-text {
+            color: #ffffff;
+        }
+
+        @media (max-width: 480px) {
+            .task-text {
+                font-size: 14px;
+                min-width: 0;
+            }
+        }
+
+        .task-item.completed .task-text {
+            text-decoration: line-through;
+            color: #9e9e9e;
+        }
+
+        .delete-btn {
+            padding: 8px 16px;
+            background: transparent;
+            color: #757575;
+            font-size: 13px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        body:not(.light-mode) .delete-btn {
+            color: #9e9e9e;
+            border-color: #404040;
+        }
+
+        .delete-btn:hover {
+            background: #1a1a1a;
+            color: white;
+            border-color: #1a1a1a;
+        }
+
+        body:not(.light-mode) .delete-btn:hover {
+            background: #404040;
+            border-color: #404040;
+        }
+
+        @media (max-width: 480px) {
+            .delete-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #9e9e9e;
+            padding: 30px 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .empty-state {
+                padding: 25px 15px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Checklist - Modo Caverna</h1>
+            <div class="controls">
+                <button class="mode-toggle" onclick="toggleDarkMode()">🌙 Modo</button>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <span class="stat-number" id="totalTasks">0</span>
+                <span class="stat-label">Total</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number" id="completedTasks">0</span>
+                <span class="stat-label">Concluídas</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number" id="pendingTasks">0</span>
+                <span class="stat-label">Pendentes</span>
+            </div>
+        </div>
+
+        <div class="pomodoro-section">
+            <h3 style="margin-bottom: 10px; font-size: 18px;">⏱️ Timer Pomodoro</h3>
+            <div class="pomodoro-timer" id="pomodoroTimer">25:00</div>
+            <div class="pomodoro-controls">
+                <button class="pomodoro-btn" onclick="startPomodoro()">Iniciar</button>
+                <button class="pomodoro-btn secondary" onclick="pausePomodoro()">Pausar</button>
+                <button class="pomodoro-btn secondary" onclick="resetPomodoro()">Resetar</button>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <input 
+                type="text" 
+                id="taskInput" 
+                placeholder="Digite uma tarefa..."
+                onkeypress="if(event.key==='Enter') addTask()"
+            >
+            <select id="taskType">
+                <option value="today">Hoje</option>
+                <option value="other">Outras</option>
+            </select>
+            <button class="add-btn" onclick="addTask()">Adicionar</button>
+        </div>
+
+        <button class="clear-completed" onclick="clearCompleted()">🗑️ Limpar Concluídas</button>
+
+        <div class="section-title">📅 Tarefas de Hoje</div>
+        <ul class="task-list" id="todayList">
+            <li class="empty-state">Nenhuma tarefa para hoje</li>
+        </ul>
+
+        <div class="section-title">📋 Outras Tarefas</div>
+        <ul class="task-list" id="otherList">
+            <li class="empty-state">Nenhuma outra tarefa</li>
+        </ul>
+    </div>
+
+    <script>
+        let tasks = [];
+        let pomodoroInterval = null;
+        let pomodoroSeconds = 25 * 60;
+        let isPomodoroPaused = true;
+
+        function loadTasks() {
+            const saved = localStorage.getItem('cavernaTasks');
+            if (saved) {
+                tasks = JSON.parse(saved);
+            }
+        }
+
+        function saveTasks() {
+            localStorage.setItem('cavernaTasks', JSON.stringify(tasks));
+        }
+
+        function loadDarkMode() {
+            const darkMode = localStorage.getItem('darkMode') === 'true';
+            if (!darkMode) {
+                document.body.classList.add('light-mode');
+            }
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('darkMode', !isLight);
+        }
+
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            const typeSelect = document.getElementById('taskType');
+            const text = input.value.trim();
+            
+            if (text === '') return;
+            
+            tasks.push({
+                id: Date.now(),
+                text: text,
+                completed: false,
+                type: typeSelect.value
+            });
+            
+            input.value = '';
+            saveTasks();
+            renderTasks();
+        }
+
+        function toggleTask(id) {
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            saveTasks();
+            renderTasks();
+        }
+
+        function clearCompleted() {
+            tasks = tasks.filter(t => !t.completed);
+            saveTasks();
+            renderTasks();
+        }
+
+        function updateStats() {
+            const total = tasks.length;
+            const completed = tasks.filter(t => t.completed).length;
+            const pending = total - completed;
+
+            document.getElementById('totalTasks').textContent = total;
+            document.getElementById('completedTasks').textContent = completed;
+            document.getElementById('pendingTasks').textContent = pending;
+        }
+
+        function renderTaskList(listId, taskType) {
+            const list = document.getElementById(listId);
+            const filteredTasks = tasks.filter(t => t.type === taskType);
+            
+            if (filteredTasks.length === 0) {
+                const emptyMsg = taskType === 'today' ? 'Nenhuma tarefa para hoje' : 'Nenhuma outra tarefa';
+                list.innerHTML = `<li class="empty-state">${emptyMsg}</li>`;
+                return;
+            }
+            
+            list.innerHTML = filteredTasks.map(task => `
+                <li class="task-item ${task.completed ? 'completed' : ''}">
+                    <input 
+                        type="checkbox" 
+                        ${task.completed ? 'checked' : ''}
+                        onchange="toggleTask(${task.id})"
+                    >
+                    <span class="task-text">${task.text}</span>
+                    <button class="delete-btn" onclick="deleteTask(${task.id})">Remover</button>
+                </li>
+            `).join('');
+        }
+
+        function renderTasks() {
+            renderTaskList('todayList', 'today');
+            renderTaskList('otherList', 'other');
+            updateStats();
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updatePomodoroDisplay() {
+            document.getElementById('pomodoroTimer').textContent = formatTime(pomodoroSeconds);
+        }
+
+        function startPomodoro() {
+            if (!isPomodoroPaused) return;
+            
+            isPomodoroPaused = false;
+            pomodoroInterval = setInterval(() => {
+                if (pomodoroSeconds > 0) {
+                    pomodoroSeconds--;
+                    updatePomodoroDisplay();
+                } else {
+                    pausePomodoro();
+                    alert('⏰ Pomodoro concluído! Hora de fazer uma pausa!');
+                    resetPomodoro();
+                }
+            }, 1000);
+        }
+
+        function pausePomodoro() {
+            isPomodoroPaused = true;
+            if (pomodoroInterval) {
+                clearInterval(pomodoroInterval);
+                pomodoroInterval = null;
+            }
+        }
+
+        function resetPomodoro() {
+            pausePomodoro();
+            pomodoroSeconds = 25 * 60;
+            updatePomodoroDisplay();
+        }
+
+        loadDarkMode();
+        loadTasks();
+        renderTasks();
+        updatePomodoroDisplay();
+    </script>
+</body>
+</html>
